@@ -6,25 +6,25 @@ const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('background').appendChild(renderer.domElement);
 
-// Create particles
-const particles = new THREE.Geometry();
-for (let i = 0; i < 5000; i++) {
-  const particle = new THREE.Vector3(
-    (Math.random() - 0.5) * 1000,
-    (Math.random() - 0.5) * 1000,
-    (Math.random() - 0.5) * 1000
-  );
-  particles.vertices.push(particle);
+// Create particles using BufferGeometry
+const particles = new THREE.BufferGeometry();
+const particleCount = 12000;
+const positions = new Float32Array(particleCount * 3);
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 600;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 600;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 600;
 }
-const particleMaterial = new THREE.PointsMaterial({ color: 0x00ffff, size: 1 });
+particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particleMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2.5 });
 const particleSystem = new THREE.Points(particles, particleMaterial);
 scene.add(particleSystem);
 
-camera.position.z = 5;
+camera.position.z = 2.8;
 
 function animate() {
   requestAnimationFrame(animate);
-  particleSystem.rotation.y += 0.0005;
+  particleSystem.rotation.y += 0.002;
   renderer.render(scene, camera);
 }
 
